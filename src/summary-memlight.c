@@ -17,8 +17,10 @@ static int max_unique_fn_calls = MAX_INFLIGHT_FUNCTIONS;
 void armpl_summary_exit()
 {
   armpl_lnkdlst_t *listEntry = listHead;
+  armpl_lnkdlst_t *prevEntry = listHead;
   armpl_lnkdlst_t *thisEntry = listHead;
   armpl_lnkdlst_t *nextEntry = listHead;
+  char *currRoutineName  = NULL;
   FILE *fptr;
   char fname[64];
   struct timespec armpl_progstop;
@@ -52,12 +54,15 @@ void armpl_summary_exit()
    			printingtime = 0.0;
    		}
    		fprintf(fptr, "Routine: %8s  nCalls: %6d  Mean_time %12.6e   nUserCalls: %6d  Mean_user_time: %12.6e   Inputs: %s\n", 
-   				thisEntry->routineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
+   				currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
    				listEntry->callCount_top, printingtime,
    				listEntry->inputsString);
+		prevEntry = listEntry;
+        	free(listEntry->inputsString);
+                free(prevEntry);
 	 	listEntry = listEntry->nextCase;
 	 } while (NULL != listEntry);
-	
+         free(currRoutineName);	
 	 listEntry = nextEntry;
    }
 
@@ -111,8 +116,8 @@ void armpl_summary_dump()
   				listEntry->inputsString);
 		prevEntry = listEntry;
         	free(listEntry->inputsString);
-		listEntry = listEntry->nextCase;
                 free(prevEntry);
+		listEntry = listEntry->nextCase;
 	} while (NULL != listEntry);
 	
         free(currRoutineName);
@@ -315,6 +320,7 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
 			if (0 == strcmp(listEntry->inputsString, inputString))
 			{
 				found = 2;
+			        free(inputString);	
 				break;
 			}
 			if (NULL != listEntry->nextCase)
@@ -355,7 +361,7 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
   if (logger->numIargs > 1) free(logger->Iinp);
   if (logger->numCargs > 0) free(logger->Cinp);
 
-  if (unique_fn_calls > MAX_INFLIGHT_FUNCTIONS && 0==toplevel_global)
+  if (unique_fn_calls > max_unique_fn_calls && 0==toplevel_global)
   {
     
     armpl_summary_dump();
@@ -385,8 +391,12 @@ void armpl_enable_summary_list(void) {
 		/* Register exit function */
 		atexit(armpl_summary_exit);
 		USERENV = getenv("ARMPL_MAX_MEM_FNS");
-		if (USERENV!=NULL && strlen(USERENV)>1) 
+		printf("Updated var: %s\n", USERENV);
+		if (USERENV!=NULL) 
+		{
 			max_unique_fn_calls = atoi(USERENV);
+			printf("Updated max: %d\n", max_unique_fn_calls);
+		}
 		else
 			max_unique_fn_calls = MAX_INFLIGHT_FUNCTIONS;
 		

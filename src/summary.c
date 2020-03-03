@@ -251,6 +251,7 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
 			if (0 == strcmp(listEntry->inputsString, inputString))
 			{
 				found = 2;
+				free(inputString);
 				break;
 			}
 			if (NULL != listEntry->nextCase)
