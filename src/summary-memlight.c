@@ -10,6 +10,7 @@
 
 armpl_lnkdlst_t *listHead = NULL;
 static int unique_fn_calls = 0;
+static int max_unique_fn_calls = MAX_INFLIGHT_FUNCTIONS;
 
 /* Routine to record log on standard program exits */
 
@@ -370,7 +371,7 @@ int armpl_get_value_int(void) {
 
 void armpl_enable_summary_list(void) {
 	static int firsttime = 1;
-	
+	char *USERENV = NULL;
 
 	/* Create linked lists */
 	listHead = malloc(sizeof(armpl_lnkdlst_t));
@@ -383,7 +384,11 @@ void armpl_enable_summary_list(void) {
 		firsttime = 0;
 		/* Register exit function */
 		atexit(armpl_summary_exit);
-		
+		USERENV = getenv("ARMPL_MAX_MEM_FNS");
+		if (USERENV!=NULL && strlen(USERENV)>1) 
+			max_unique_fn_calls = atoi(USERENV);
+		else
+			max_unique_fn_calls = MAX_INFLIGHT_FUNCTIONS;
 		
 		clock_gettime(CLOCK_MONOTONIC, &armpl_progstart);
 
