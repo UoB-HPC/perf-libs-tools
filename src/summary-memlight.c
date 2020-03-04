@@ -391,11 +391,9 @@ void armpl_enable_summary_list(void) {
 		/* Register exit function */
 		atexit(armpl_summary_exit);
 		USERENV = getenv("ARMPL_MAX_MEM_FNS");
-		printf("Updated var: %s\n", USERENV);
 		if (USERENV!=NULL) 
 		{
 			max_unique_fn_calls = atoi(USERENV);
-			printf("Updated max: %d\n", max_unique_fn_calls);
 		}
 		else
 			max_unique_fn_calls = MAX_INFLIGHT_FUNCTIONS;
