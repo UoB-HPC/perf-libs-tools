@@ -552,7 +552,6 @@ def process_components():
         inputfile = open(sys.argv[position])
         line = inputfile.readline()
         if ',' in line:
-            print("Here")
             verbose_file = False
         inputfile.close()
         inputfile = open(sys.argv[position])
