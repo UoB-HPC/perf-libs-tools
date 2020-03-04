@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #   perf-libs-tools
-#   Copyright 2017-8 Arm Limited. 
+#   Copyright 2017-8 Arm Limited.
 #   All rights reserved.
 
 import matplotlib.pyplot as plt
@@ -81,8 +81,8 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
     fftHowmany_sing = 1
     indexStore=1
   elif (
-        routine=="fftw_plan_dft" or routine=="fftw_plan_dft_c2r" or routine=="fftw_plan_dft_r2c" or 
-        routine=="fftwf_plan_dft" or routine=="fftwf_plan_dft_c2r" or routine=="fftwf_plan_dft_r2c" 
+        routine=="fftw_plan_dft" or routine=="fftw_plan_dft_c2r" or routine=="fftw_plan_dft_r2c" or
+        routine=="fftwf_plan_dft" or routine=="fftwf_plan_dft_c2r" or routine=="fftwf_plan_dft_r2c"
         ) :
     plan = int(0)
     nFFTs = int(1)  #### implemented through howmany for fftw interface
@@ -95,11 +95,11 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
     fftPlanPtrs.append([int(readline[-1]),routine,[-1,-1,-1]])
     indexStore=1
   elif (
-        routine=="fftw_plan_many_dft" or routine=="fftw_plan_many_dft_c2r" or routine=="fftw_plan_many_dft_r2c" or 
-        routine=="dfftw_plan_many_dft" or routine=="dfftw_plan_many_dft_c2r" or routine=="dfftw_plan_many_dft_r2c" or 
-        routine=="dfftw_plan_many_dft_" or routine=="dfftw_plan_many_dft_c2r_" or routine=="dfftw_plan_many_dft_r2c_" or 
-        routine=="sfftw_plan_many_dft" or routine=="sfftw_plan_many_dft_c2r" or routine=="sfftw_plan_many_dft_r2c" or 
-        routine=="sfftw_plan_many_dft_" or routine=="sfftw_plan_many_dft_c2r_" or routine=="sfftw_plan_many_dft_r2c_" or 
+        routine=="fftw_plan_many_dft" or routine=="fftw_plan_many_dft_c2r" or routine=="fftw_plan_many_dft_r2c" or
+        routine=="dfftw_plan_many_dft" or routine=="dfftw_plan_many_dft_c2r" or routine=="dfftw_plan_many_dft_r2c" or
+        routine=="dfftw_plan_many_dft_" or routine=="dfftw_plan_many_dft_c2r_" or routine=="dfftw_plan_many_dft_r2c_" or
+        routine=="sfftw_plan_many_dft" or routine=="sfftw_plan_many_dft_c2r" or routine=="sfftw_plan_many_dft_r2c" or
+        routine=="sfftw_plan_many_dft_" or routine=="sfftw_plan_many_dft_c2r_" or routine=="sfftw_plan_many_dft_r2c_" or
         routine=="fftwf_plan_many_dft" or routine=="fftwf_plan_many_dft_c2r" or routine=="fftwf_plan_many_dft_r2c") :
     plan = int(0)
     nFFTs = int(1)  #### implemented through howmany for fftw interface
@@ -139,7 +139,7 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
     fftHowmany_dims = int(readline[4+8+int(readline[4+7])])  # advance by the number of dimensions
     fftHowmany_sing = int(readline[1+4+8+int(readline[4+7])])
     if (fftHowmany_dims>1) :
-       for index in range(1,fftHowmany_dims) : 
+       for index in range(1,fftHowmany_dims) :
           fftHowmany_sing = fftHowmany_sing * int(readline[index+4+8+int(readline[4+7])])
 
     fftPlanPtrs.append([int(readline[-1]),routine,[-1,-1,-1]])
@@ -150,7 +150,7 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
         routine=="dfftw_execute_dft_" or routine=="dfftw_execute_dft_r2c_" or routine=="dfftw_execute_dft_c2r_" or
         routine=="sfftw_execute_dft" or routine=="sfftw_execute_dft_r2c" or routine=="sfftw_execute_dft_c2r" or
         routine=="sfftw_execute_dft_" or routine=="sfftw_execute_dft_r2c_" or routine=="sfftw_execute_dft_c2r_" or
-        routine=="fftwf_execute" or routine=="fftwf_execute_dft" or routine=="fftwf_execute_dft_r2c" or routine=="fftwf_execute_dft_c2r" 
+        routine=="fftwf_execute" or routine=="fftwf_execute_dft" or routine=="fftwf_execute_dft_r2c" or routine=="fftwf_execute_dft_c2r"
         ) :
     # add to list of executions for processing later, then return
     # note we can't do this yet as the plans may not have been previously in the file at this point
@@ -164,20 +164,20 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
   else :
     print( "Not implemented FFT parsing for routine %s" % routine)
     return
-  
+
   found = 0
   fndInd=-1
   fndLen=-1
   fndHowmany=-1
-  
-  for fnNum in range(0,len(fftNames)) : 
+
+  for fnNum in range(0,len(fftNames)) :
     if (routine==fftNames[fnNum]) :
       fndInd=fnNum
       found = 1
       # Now search over existing lengths
       foundlen=0
       for i in range (0, len(fftLens[fnNum])) :
-        testlen = fftLens[fnNum][i] 
+        testlen = fftLens[fnNum][i]
         if ( testlen == fftLen ) :
           fndLen=i
           if (plan==0) :
@@ -186,7 +186,7 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
           else :
              fftCnts[fnNum][i][1] += cnt*nFFTs
              fftTimes[fnNum][i][1] += cnt*avgtime
-          
+
           foundhow=0
           for index in range(0,len(fftHowmany[fnNum][i])) :
              if ( fftHowmany_sing == fftHowmany[fnNum][i][index] ) :
@@ -216,7 +216,7 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
 
           foundlen=1
           break
-          
+
       if (foundlen==0) :
         fndLen=len(fftLens[fnNum])
         fftLens[fnNum].append(fftLen)
@@ -232,7 +232,7 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
 
   if (found == 0) :
     fndInd = len(fftNames)  # remember we're adding 1 entry in a moment
-    
+
     fftNames.append(routine)
     fftLens.append([fftLen])
     fftHowmany.append([[fftHowmany_sing]])
@@ -247,9 +247,9 @@ def logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPt
 
   if (indexStore==1) :
     fftPlanPtrs[-1][2] = [fndInd,fndLen,fndHowmany]
-    
+
 #################################################
-# After collecting all calls we can associate 
+# After collecting all calls we can associate
 # FFT plans with their corresponding executes
 #################################################
 
@@ -264,24 +264,24 @@ def processFFTexecutes(fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlan
            break
      if foundIndex==-1 :
         print( "Missing plan!")
-        continue   
+        continue
      cnt=fftExecPtrs[i][1]
      avgtime=fftExecPtrs[i][2]
      nFFTs=1
      fnNum=fftPlanPtrs[foundIndex][2][0]
      fnInd=fftPlanPtrs[foundIndex][2][1]
      fnHowmany=fftPlanPtrs[foundIndex][2][2]
-     
-     
+
+
      fftCnts[fnNum][fnInd][1] = fftCnts[fnNum][fnInd][1]+cnt*nFFTs
      fftTimes[fnNum][fnInd][1] = fftTimes[fnNum][fnInd][1]+cnt*avgtime
 
      fftCnts[fnNum][fnInd][3][fnHowmany] = fftCnts[fnNum][fnInd][3][fnHowmany]+cnt*nFFTs
      fftTimes[fnNum][fnInd][3][fnHowmany] = fftTimes[fnNum][fnInd][3][fnHowmany]+cnt*avgtime
-           
+
 #################################################
 # Calculate the total counts of each length FFT
-# accumulating the relevant details from all FFT 
+# accumulating the relevant details from all FFT
 # calls, irrespective of dimension
 #################################################
 
@@ -301,8 +301,8 @@ def processMultidimFFTs(fftNames, fftLens, fftCnts, fftTimes, fftHowmany) :
 
    # Now iniialize array of zeroes up to maxlen
   fftTotCnt = [0] * (maxlen+2)
-  
-   # Now loop over FFTW routines called accumulating multidimensional counts  
+
+   # Now loop over FFTW routines called accumulating multidimensional counts
   for routineNum in range(0,len(fftNames)) :
      routine = fftNames[routineNum]
      if ( not routine.startswith("fftw") and not routine.startswith("sfftw") and not  routine.startswith("dfftw")) :
@@ -327,7 +327,7 @@ def processMultidimFFTs(fftNames, fftLens, fftCnts, fftTimes, fftHowmany) :
 
      elif (routine.endswith("_plan_many_dft") or routine.endswith("_plan_many_dft_r2c") or routine.endswith("_plan_many_dft_c2r")) :
         for lenindex in range (0,len(fftLens[routineNum])) :
-           nDim = len(fftLens[routineNum][lenindex]) 
+           nDim = len(fftLens[routineNum][lenindex])
            for testhowmany in range (0, len(fftCnts[routineNum][lenindex][3])) :
               calcFftContribs(nDim, fftTotCnt, fftCnts[routineNum][lenindex][3][testhowmany], fftLens[routineNum][lenindex], fftHowmany[routineNum][lenindex][testhowmany])
 
@@ -337,7 +337,7 @@ def processMultidimFFTs(fftNames, fftLens, fftCnts, fftTimes, fftHowmany) :
         print( "Length= %6d  Total count= %12d " % (i, fftTotCnt[i]))
 
 #################################################
-# Calculate the total number of each transform 
+# Calculate the total number of each transform
 # in a multidimensional FFT
 #################################################
 
@@ -353,7 +353,7 @@ def calcFftContribs(nDim, fftTotCnt, fftCnt, fftLens, fftHowmany) :
    #[+ (n1*n2*n3) transforms of length n4...]
    #
    # Want to produce a list of the total number of invocations of each length
-   # 
+   #
    #  dimProduct=1
    #  if (N==1)
    #  	fftTotCnt[n[0]] ++;
@@ -368,7 +368,7 @@ def calcFftContribs(nDim, fftTotCnt, fftCnt, fftLens, fftHowmany) :
    #  }						}
 
   dimProduct=1
-  
+
   if (nDim==1) :
      fftTotCnt[fftLens[0]] += 1*fftCnt*fftHowmany
   else :
@@ -382,17 +382,23 @@ def calcFftContribs(nDim, fftTotCnt, fftCnt, fftLens, fftHowmany) :
 # Collect all the data about BLAS calls made
 #################################################
 
-def logBLAS(readline, blasNames, blasCnts, blasTimes, blasCnts_top, blasTimes_top):
+def logBLAS(verbose_file, readline, blasNames, blasCnts, blasTimes, blasCnts_top, blasTimes_top):
 
-  # set up the bits from the read line
-  routine = readline[1]
-  cnt = int(readline[3])
-  avgtime = float(readline[5])
-  cnt_top = int(readline[7])
-  avgtime_top = float(readline[9])
-  
+  if verbose_file == True:
+    routine = readline[1]
+    cnt = int(readline[3])
+    avgtime = float(readline[5])
+    cnt_top = int(readline[7])
+    avgtime_top = float(readline[9])
+  else:
+    routine = readline[0]
+    cnt = int(readline[1])
+    avgtime = float(readline[2])
+    cnt_top = int(readline[3])
+    avgtime_top = float(readline[4])
+
   found = 0
-  for fnNum in range(0,len(blasNames)) : 
+  for fnNum in range(0,len(blasNames)) :
     if (routine==blasNames[fnNum]) :
       found = 1
       blasCnts[fnNum] += cnt
@@ -403,27 +409,33 @@ def logBLAS(readline, blasNames, blasCnts, blasTimes, blasCnts_top, blasTimes_to
 
   if (found == 0) :
     blasNames.append(routine)
-    blasCnts.append(cnt)     
+    blasCnts.append(cnt)
     blasTimes.append(cnt*avgtime)
-    blasCnts_top.append(cnt_top)     
+    blasCnts_top.append(cnt_top)
     blasTimes_top.append(cnt_top*avgtime_top)
-    
+
 
 #################################################
 # Collect all the data about Math calls made
 #################################################
 
-def logMath(readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top):
+def logMath(verbose_file, readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top):
 
-  # set up the bits from the read line
-  routine = readline[1]
-  cnt = int(readline[3])
-  avgtime = float(readline[5])
-  cnt_top = int(readline[7])
-  avgtime_top = float(readline[9])
-  
+  if verbose_file == True:
+    routine = readline[1]
+    cnt = int(readline[3])
+    avgtime = float(readline[5])
+    cnt_top = int(readline[7])
+    avgtime_top = float(readline[9])
+  else:
+    routine = readline[0]
+    cnt = int(readline[1])
+    avgtime = float(readline[2])
+    cnt_top = int(readline[3])
+    avgtime_top = float(readline[4])
+
   found = 0
-  for fnNum in range(0,len(mathNames)) : 
+  for fnNum in range(0,len(mathNames)) :
     if (routine==mathNames[fnNum]) :
       found = 1
       mathCnts[fnNum] += cnt
@@ -434,27 +446,32 @@ def logMath(readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_to
 
   if (found == 0) :
     mathNames.append(routine)
-    mathCnts.append(cnt)     
+    mathCnts.append(cnt)
     mathTimes.append(cnt*avgtime)
-    mathCnts_top.append(cnt_top)     
+    mathCnts_top.append(cnt_top)
     mathTimes_top.append(cnt_top*avgtime_top)
-    
+
 
 #################################################
 # Collect all the data about LAPACK calls made
 #################################################
 
-def logLAPACK(readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top):
+def logLAPACK(verbose_file, readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top):
 
-  # set up the bits from the read line
-  routine = readline[1]
-  cnt = int(readline[3])
-  avgtime = float(readline[5])
-  cnt_top = int(readline[7])
-  avgtime_top = float(readline[9])
-  
-  found = 0
-  for fnNum in range(0,len(lapackNames)) : 
+  if verbose_file == True:
+    routine = readline[1]
+    cnt = int(readline[3])
+    avgtime = float(readline[5])
+    cnt_top = int(readline[7])
+    avgtime_top = float(readline[9])
+  else:
+    routine = readline[0]
+    cnt = int(readline[1])
+    avgtime = float(readline[2])
+    cnt_top = int(readline[3])
+    avgtime_top = float(readline[4])
+
+  for fnNum in range(0,len(lapackNames)) :
     if (routine==lapackNames[fnNum]) :
       found = 1
       lapackCnts[fnNum] += cnt
@@ -465,16 +482,16 @@ def logLAPACK(readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, la
 
   if (found == 0) :
     lapackNames.append(routine)
-    lapackCnts.append(cnt)     
+    lapackCnts.append(cnt)
     lapackTimes.append(cnt*avgtime)
-    lapackCnts_top.append(cnt_top)     
+    lapackCnts_top.append(cnt_top)
     lapackTimes_top.append(cnt_top*avgtime_top)
-    
+
 
 #################################################
 
 def process_components():
-    
+
   # initialize variables
   # Five categories : 0 BLAS1, 1 BLAS2, 2 BLAS3, 3 LAPACK, 4 FFT
   cnt = [0, 0, 0, 0, 0, 0]
@@ -489,19 +506,19 @@ def process_components():
   lastcategory=-1
   datatype=-1
   total_run_time = 0.0
-  
+
   fftNames = [  ]
   fftLens = [ ]
   fftCnts = [ ]
   fftTimes = [ ]
   fftHowmany = [ ]
-  
+
   blasNames = [ [],[],[] ]
   blasCnts = [ [],[],[] ]
   blasTimes = [ [],[],[] ]
   blasCnts_top = [ [],[],[] ]
   blasTimes_top = [ [],[],[] ]
-  
+
   lapackNames = [  ]
   lapackCnts = [ ]
   lapackTimes = [ ]
@@ -513,7 +530,7 @@ def process_components():
   mathTimes = [ ]
   mathCnts_top = [ ]
   mathTimes_top = [ ]
-  
+
   BLAS_ROUTINES=[
   	["rotg_", "rotmg_", "rot_", "rotm_", "swap_", "scal_", "copy_", "axpy_", "dot_", "dotu_", "dotc_", "nrm2_", "asum_", "amax_"],
   	["gemv_", "gbmv_", "hemv_", "hbmv_", "hpmv_", "symv_", "sbmv_", "spmv_", "trmv_", "tbmv_", "tpmv_", "trsv_", "tbsv_", "tpsv_", "ger_", "geru_", "gerc_", "her_", "hpr_", "her2_", "hpr2_", "syr_", "spr_", "syr2_", "spr2_"],
@@ -524,47 +541,51 @@ def process_components():
    # open input/output files
   # count the arguments
   nArguments = len(sys.argv) - 1
-  
+
   for position in range (1, nArguments+1) :
+
+    verbose_file = True
 
     # open file
     print( "Opening file %s" % sys.argv[position])
     if os.path.isfile(sys.argv[position]) and os.access(sys.argv[position], os.R_OK):
         inputfile = open(sys.argv[position])
+        line = inputfile.readline()
+        if ',' in line:
+            verbose_file = False
+        inputfile.close()
+        inputfile = open(sys.argv[position])
     else :
         print( "File >>>%s<<< is not readable.  Skipping..." % sys.argv[position])
         continue
-    
+
     # Plan pointers are on a per-process basis so should only be tracked within a file
     fftPlanPtrs = [ ]
     fftExecPtrs = [ ]
-    
 
-   verbose_file = False
 
-    if ',' in inputfile[0]:
-       verbose_file = True
 
-    # read file 
-    for line in  inputfile:
-      if verbose_file:
-         readline = line.split()
-         routine = readline[1]
-         newcnt = readline[3]
-         newavgtime = readline[5]
-         newcnt_top = readline[7]
-         newavgtime_top = readline[9]
+
+    # read file
+    for line in inputfile:
+      if verbose_file == True:
+        readline = line.split()
+        routine = readline[1]
+        newcnt = readline[3]
+        newavgtime = readline[5]
+        newcnt_top = readline[7]
+        newavgtime_top = readline[9]
       else:
-         readline = line.split(",")
-         routine = readline[0]
-         newcnt = readline[1]
-         newavgtime = readline[2]
-         newcnt_top = readline[3]
-         newavgtime_top = readline[4]
-         
+        readline = line.split(",")
+        routine = readline[0]
+        newcnt = readline[1]
+        newavgtime = readline[2]
+        newcnt_top = readline[3]
+        newavgtime_top = readline[4]
+
       # Now let's search for the different sets in turn
       category=-1
-      
+
       # Start with this bein the main function
       if (routine == "main") :
         total_run_time = total_run_time + float(newavgtime)
@@ -576,31 +597,32 @@ def process_components():
 
       if (routine in MATH_ROUTINES) :
          category = 5
-            
+
       # FFTs : does it have the string "fft" in the routine name?
       if (category == -1 or category==4) :
         if ( routine.find("fft") > -1 ) :
           category = 4
-          logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPtrs, fftExecPtrs)
-          
+          if verbose_file:
+            logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPtrs, fftExecPtrs)
+
       # BLAS : does it end in the right string_?
       if (category == -1 ) :
         for level in range(0,3) :
            for testfn in BLAS_ROUTINES[level] :
              if ( routine.endswith(testfn) ) :
                category = level
-      
+
       # BLAS : Let's process this data
       if (category==0 or category==1 or category==2) :
-        logBLAS(readline, blasNames[category], blasCnts[category], blasTimes[category], blasCnts_top[category], blasTimes_top[category])
+        logBLAS(verbose_file, readline, blasNames[category], blasCnts[category], blasTimes[category], blasCnts_top[category], blasTimes_top[category])
 
       # MATH : Process the data
       if (category == 5) :
-        logMath(readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top)
+        logMath(verbose_file, readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top)
 
       # LAPACK : Whatever's left!
       if (category == -1 or category==3) :
-        logLAPACK(readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top)
+        logLAPACK(verbose_file, readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top)
         category=3
 
       # Find datatype (for most routines)
@@ -614,7 +636,7 @@ def process_components():
         datatype=3
 
 
-      if (category>-1) :        
+      if (category>-1) :
         # Store data in correct set
         cnt[category] = cnt[category]+int(newcnt)
         tottime[category] = tottime[category]+float(newcnt)*float(newavgtime)
@@ -625,17 +647,17 @@ def process_components():
           datatype_time[datatype] = datatype_time[datatype]+float(newcnt)*float(newavgtime)
           datatype_cnt_top[datatype] = datatype_cnt_top[datatype]+int(newcnt_top)
           datatype_time_top[datatype] = datatype_time_top[datatype]+float(newcnt_top)*float(newavgtime_top)
-      
+
       # Store last routine done for easy assignment
       lastroutine=routine
       lastcategory=category
-      
+
     processFFTexecutes(fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPtrs, fftExecPtrs)
-  
+
   #####
   # Print library function data
   #####
-  
+
   print( "BLAS level 1     : count %10s    total time %12.4f  user count %10s  user time %12.4f" % (cnt[0], tottime[0], cnt_top[0], tottime_top[0]) )
   print( "BLAS level 2     : count %10s    total time %12.4f  user count %10s  user time %12.4f" % (cnt[1], tottime[1], cnt_top[1], tottime_top[1]) )
   print( "BLAS level 3     : count %10s    total time %12.4f  user count %10s  user time %12.4f" % (cnt[2], tottime[2], cnt_top[2], tottime_top[2]) )
@@ -657,7 +679,7 @@ def process_components():
     print( "FFT cases:")
     print( "----------")
     print( " FFTW calls:")
-  
+
     # Printing without howmany info
     for fnNum in range(0,len(fftNames)) :
        if (fftNames[fnNum].find("fftw") > -1) :
@@ -666,7 +688,7 @@ def process_components():
           orderedTuple = sorted(unorderedTuple, key=lambda field: field[0])
           for i in range(0,len(fftLens[fnNum])) :
              print( "%25s len= %5s   plan-cnt= %10d   plan-Time= %12.6f exec-cnt= %10d   exec-Time= %12.6f" % (
-                fftNames[fnNum], orderedTuple[i][0], orderedTuple[i][1][0], orderedTuple[i][2][0], 
+                fftNames[fnNum], orderedTuple[i][0], orderedTuple[i][1][0], orderedTuple[i][2][0],
                 orderedTuple[i][1][1], orderedTuple[i][2][1]))
 
     print( " ...of which the breakdown by 'howmany' cases shows:")
@@ -682,7 +704,7 @@ def process_components():
                 if (orderedTuple[i][1][3][j]>0 and orderedTuple[i][3][j]>0) :   # Check non-zero entries for fftCnt and fftHowmany
                    avgtime=(orderedTuple[i][2][3][j]/(orderedTuple[i][1][3][j]*orderedTuple[i][3][j]))
                 print( "%25s len= %5s howmany= %10d  plan-cnt= %10d   plan-Time= %12.6f exec-cnt= %10d   exec-Time= %12.6f   avg-time= %16.10f" % (
-                    fftNames[fnNum], orderedTuple[i][0], orderedTuple[i][3][j], orderedTuple[i][1][2][j], orderedTuple[i][2][2][j], 
+                    fftNames[fnNum], orderedTuple[i][0], orderedTuple[i][3][j], orderedTuple[i][1][2][j], orderedTuple[i][2][2][j],
                     orderedTuple[i][1][3][j], orderedTuple[i][2][3][j], avgtime))
 
     # Printing without howmany info
@@ -698,11 +720,11 @@ def process_components():
           orderedTuple = sorted(unorderedTuple, key=lambda field: field[0])
           for i in range(0,len(fftLens[fnNum])) :
              print( "%25s len= %5s   plan-cnt= %10d   plan-Time= %12.6f exec-cnt= %10d   exec-Time= %12.6f" % (
-                fftNames[fnNum], orderedTuple[i][0], orderedTuple[i][1][0], orderedTuple[i][2][0], 
+                fftNames[fnNum], orderedTuple[i][0], orderedTuple[i][1][0], orderedTuple[i][2][0],
                 orderedTuple[i][1][1], orderedTuple[i][2][1]))
 
   processMultidimFFTs(fftNames, fftLens, fftCnts, fftTimes, fftHowmany)
-  
+
   #####
   # Print BLAS summary data if present
   #####
@@ -711,7 +733,7 @@ def process_components():
     print( " ")
     print( "BLAS cases:")
     print( "----------")
-  
+
     for category in range(0,3) :
        if (len(blasNames[category])>0) :
           print( "BLAS level %d:" % (int(category)+1))
@@ -721,7 +743,7 @@ def process_components():
           for i in range(0,len(blasNames[category])) :
              print( "%8s     cnt= %10d  totTime= %12.4f   called_tot= %10d  topTime= %12.4f    (%%age of runtime: %6.3f )" % (
                  orderedTuple[i][0], orderedTuple[i][1], orderedTuple[i][2], orderedTuple[i][3], orderedTuple[i][4], orderedTuple[i][4]/float(total_run_time)*100.0))
-             
+
   #####
   # Print LAPACK summary data if present
   #####
@@ -730,7 +752,7 @@ def process_components():
     print( " ")
     print( "LAPACK cases:")
     print( "----------")
-  
+
     # convert to a tuple for sorting
     unorderedTuple = zip(lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top)
     orderedTuple = sorted(unorderedTuple, key=lambda field: field[2], reverse=True)
@@ -746,7 +768,7 @@ def process_components():
     print( " ")
     print( "Math cases:")
     print( "----------")
-  
+
     # convert to a tuple for sorting
     unorderedTuple = zip(mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top)
     orderedTuple = sorted(unorderedTuple, key=lambda field: field[2], reverse=True)
@@ -758,7 +780,7 @@ def process_components():
   #####
   # Generate 'armpl.blas' file for visualization afterwards
   #####
-  
+
   if (len(blasNames[0])+len(blasNames[1])+len(blasNames[2])>0) :
      fname = '/tmp/armpl.blas'
      outputfile = open(fname, 'w')
@@ -773,16 +795,16 @@ def process_components():
                  if ( not testroutine.startswith(prefix) ) :
                     continue
                  if ( testroutine.endswith(blasfn) ) :
-                    outputfile.write( "%d\n %12.6f \n" % (blasCnts[level][index], blasTimes[level][index])) 
+                    outputfile.write( "%d\n %12.6f \n" % (blasCnts[level][index], blasTimes[level][index]))
                     found=1
                     break
               if (found==0) :
                  outputfile.write( "%d\n %3.1f \n" %(0, 0))
-     
+
      print("Created %s \nVisualize using ./blas_usage.py -x -l -i %s" %(fname, fname)  )
 
 #########################################
 # Footer for catching no main
 if __name__ == '__main__':
     main()
-    
+
