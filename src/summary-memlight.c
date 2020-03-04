@@ -54,7 +54,7 @@ void armpl_summary_exit()
    		} else {
    			printingtime = 0.0;
    		}
-   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e,%s\n", 
+   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e%s\n", 
    				currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
    				listEntry->callCount_top, printingtime,
    				listEntry->inputsString);
@@ -111,7 +111,7 @@ void armpl_summary_dump()
   		} else {
   			printingtime = 0.0;
   		}
-   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e,%s\n", 
+   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e%s\n", 
   			currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
   				listEntry->callCount_top, printingtime,
   				listEntry->inputsString);
@@ -247,13 +247,13 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
   {
   	for (i = 0; i<totToStore; i++)
   	{
-  		sprintf(&inputString[i*13], " %12d", logger->Iinp[i]);
+  		sprintf(&inputString[i*13], ",%12d", logger->Iinp[i]);
   	}
   }
   if (logger->numCargs > 0)
   {
   	for (i = 0; i<logger->numCargs; i++)
-  		sprintf(&inputString[logger->numIargs*13+2*i], " %c", logger->Cinp[i]);
+  		sprintf(&inputString[logger->numIargs*13+2*i], ",%c", logger->Cinp[i]);
   }
   sprintf(&inputString[totToStore*13+2*logger->numCargs], " ");
   #pragma omp critical 
