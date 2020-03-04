@@ -1,12 +1,21 @@
 #!/bin/bash
 
-if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ] ;
+if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ];
 then
-	echo "Usage ./process-dgemm.sh <files>"
+	echo "Usage ./process-dgemm.sh <files> [-r or --reduced]]"
 	exit
 fi
 
-for f in $*
+if [ "$1" == "--reduced" ] || [ "$1" == "-r" ] ;
+then
+    EXE=./Red-Process-dgemm
+    START=2
+else
+    EXE=./Process-dgemm
+    START=1
+fi
+
+for f in ${@:$START}
 do
 	if [ ! -f $f ] ;
 	then
@@ -15,7 +24,7 @@ do
 	fi
 done
 
-if [ ! -f Process-dgemm ] ;
+if [ ! -f Process-dgemm ] || [ ! -f Red-Process-dgemm ] ;
 then
 	echo "Need to run './Process-dgemm'.  Either I am not in perf-libs-tools/tools or you need to compile:"
 	echo "  $ gcc -o Process-dgemm process-dgemm.c"
@@ -28,7 +37,7 @@ rm -f ${TMPFILE}_d
 rm -f ${TMPFILE}_s
 rm -f ${TMPFILE}_z
 rm -f ${TMPFILE}_c
-for file in $*
+for file in ${@:$START}
 do
 	grep dgemm ${file} >> ${TMPFILE}_d
 	grep sgemm ${file} >> ${TMPFILE}_s
@@ -36,10 +45,10 @@ do
 	grep cgemm ${file} >> ${TMPFILE}_c
 done
 
-./Process-dgemm 0 ${TMPFILE}_d
-./Process-dgemm 1 ${TMPFILE}_s
-./Process-dgemm 2 ${TMPFILE}_z
-./Process-dgemm 3 ${TMPFILE}_c
+${EXE} 0 ${TMPFILE}_d
+${EXE} 1 ${TMPFILE}_s
+${EXE} 2 ${TMPFILE}_z
+${EXE} 3 ${TMPFILE}_c
 
 echo "GEMM data created.  Visualize using, for example"
 echo "   $ ./heat_dgemm.py -i /tmp/armpl.dgemm"

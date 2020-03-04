@@ -42,6 +42,7 @@ tools: tools/Process-dgemm
 
 tools/Process-dgemm:
 	cd tools ; gcc -o Process-dgemm process-dgemm.c -O2 -lm
+	cd tools ; gcc -o Red-Process-dgemm red-process-dgemm.c -O2 -lm
 
 clean:
 	rm -f src/preload-gen.c src/preload-sumgen.c
