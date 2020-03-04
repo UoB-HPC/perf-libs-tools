@@ -53,20 +53,20 @@ void armpl_summary_exit()
    		} else {
    			printingtime = 0.0;
    		}
-   		fprintf(fptr, "Routine: %8s  nCalls: %6d  Mean_time %12.6e   nUserCalls: %6d  Mean_user_time: %12.6e   Inputs: %s\n", 
+   		fprintf(fptr, "%8s,%d,%12.6e,%d,%12.6e,%s\n", 
    				currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
    				listEntry->callCount_top, printingtime,
    				listEntry->inputsString);
 		prevEntry = listEntry;
-        	free(listEntry->inputsString);
-                free(prevEntry);
+    	free(listEntry->inputsString);
+        free(prevEntry);
 	 	listEntry = listEntry->nextCase;
 	 } while (NULL != listEntry);
-         free(currRoutineName);	
+     free(currRoutineName);	
 	 listEntry = nextEntry;
    }
 
-  fprintf(fptr, "Routine: main  nCalls: 1  Total_time %12.6e nCalls: 1  Total_time %12.6e \n", 
+  fprintf(fptr, "main,1,%12.6e,1,%12.6e,%s\n", 
   	armpl_progstop.tv_sec - armpl_progstart.tv_sec + 1.0e-9*(armpl_progstop.tv_nsec - armpl_progstart.tv_nsec), 
   	armpl_progstop.tv_sec - armpl_progstart.tv_sec + 1.0e-9*(armpl_progstop.tv_nsec - armpl_progstart.tv_nsec));
 
@@ -110,17 +110,17 @@ void armpl_summary_dump()
   		} else {
   			printingtime = 0.0;
   		}
-  		fprintf(fptr, "Routine: %8s  nCalls: %6d  Mean_time %12.6e   nUserCalls: %6d  Mean_user_time: %12.6e   Inputs: %s\n", 
+   		fprintf(fptr, "%8s,%d,%12.6e,%d,%12.6e,%s\n", 
   			currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
   				listEntry->callCount_top, printingtime,
   				listEntry->inputsString);
 		prevEntry = listEntry;
-        	free(listEntry->inputsString);
-                free(prevEntry);
+        free(listEntry->inputsString);
+        free(prevEntry);
 		listEntry = listEntry->nextCase;
 	} while (NULL != listEntry);
 	
-        free(currRoutineName);
+    free(currRoutineName);
 	listEntry = nextEntry;
   }
 

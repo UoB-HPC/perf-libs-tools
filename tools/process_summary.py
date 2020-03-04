@@ -539,15 +539,29 @@ def process_components():
     fftPlanPtrs = [ ]
     fftExecPtrs = [ ]
     
-    # read file    
+
+   verbose_file = False
+
+    if ',' in inputfile[0]:
+       verbose_file = True
+
+    # read file 
     for line in  inputfile:
-      readline = line.split()
-      routine = readline[1]
-      newcnt = readline[3]
-      newavgtime = readline[5]
-      newcnt_top = readline[7]
-      newavgtime_top = readline[9]
-      
+      if verbose_file:
+         readline = line.split()
+         routine = readline[1]
+         newcnt = readline[3]
+         newavgtime = readline[5]
+         newcnt_top = readline[7]
+         newavgtime_top = readline[9]
+      else:
+         readline = line.split(",")
+         routine = readline[0]
+         newcnt = readline[1]
+         newavgtime = readline[2]
+         newcnt_top = readline[3]
+         newavgtime_top = readline[4]
+         
       # Now let's search for the different sets in turn
       category=-1
       
