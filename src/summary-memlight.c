@@ -44,6 +44,7 @@ void armpl_summary_exit()
    while (NULL != listEntry)
    {
    	thisEntry = listEntry;
+  	currRoutineName = listEntry->routineName;
    	nextEntry = listEntry->nextRoutine;
    	do
    	{
@@ -53,7 +54,7 @@ void armpl_summary_exit()
    		} else {
    			printingtime = 0.0;
    		}
-   		fprintf(fptr, "%8s,%d,%12.6e,%d,%12.6e,%s\n", 
+   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e,%s\n", 
    				currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
    				listEntry->callCount_top, printingtime,
    				listEntry->inputsString);
@@ -66,7 +67,7 @@ void armpl_summary_exit()
 	 listEntry = nextEntry;
    }
 
-  fprintf(fptr, "main,1,%12.6e,1,%12.6e,%s\n", 
+  fprintf(fptr, "main,1,%12.6e,1,%12.6e\n", 
   	armpl_progstop.tv_sec - armpl_progstart.tv_sec + 1.0e-9*(armpl_progstop.tv_nsec - armpl_progstart.tv_nsec), 
   	armpl_progstop.tv_sec - armpl_progstart.tv_sec + 1.0e-9*(armpl_progstop.tv_nsec - armpl_progstart.tv_nsec));
 
@@ -110,7 +111,7 @@ void armpl_summary_dump()
   		} else {
   			printingtime = 0.0;
   		}
-   		fprintf(fptr, "%8s,%d,%12.6e,%d,%12.6e,%s\n", 
+   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e,%s\n", 
   			currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
   				listEntry->callCount_top, printingtime,
   				listEntry->inputsString);
