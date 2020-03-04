@@ -11,7 +11,7 @@ all: Makefile armpl armpl-math generic tools
 ## ARMPL Tracer
 armpl: preload-sumgen.c 
 	cd src && gcc -fPIC ${CFLAGS} -shared -o ../lib/lib$@-summarylog.so preload-sumgen.c summary.c -ldl
-	cd src && gcc -ggdb3  -fPIC ${CFLAGS} -shared -o ../lib/lib$@-memlightlog.so preload-sumgen.c summary-memlight.c -ldl
+	cd src && gcc -fPIC ${CFLAGS} -shared -o ../lib/lib$@-memlightlog.so preload-sumgen.c summary-memlight.c -ldl
 
 
 preload-sumgen.c: src/makepreload-post.py 

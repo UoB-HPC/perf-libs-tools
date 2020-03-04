@@ -179,7 +179,7 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
   // static FILE *fptr;
   armpl_lnkdlst_t *listEntry = listHead;
   int stringLen, totToStore;
-  char *inputString;
+  char *inputString, *inputBuffer;
   va_list ap;
   clock_gettime(CLOCK_MONOTONIC, &logger->ts_end);
 
@@ -244,22 +244,14 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
 
   unsigned int written = 0;
   stringLen = totToStore*13+logger->numCargs*2+2;
-  char inputBuffer[stringLen*sizeof(char)];
+  inputBuffer = (char*)malloc(stringLen*sizeof(char));
 
-  if (totToStore > 0)
-  {
-  	for (i = 0; i<totToStore; i++)
-  		written += sprintf(&inputBuffer[written], ",%d", logger->Iinp[i]);
-  }
-  if (logger->numCargs > 0)
-  {
-  	for (i = 0; i<logger->numCargs; i++)
-  		written += sprintf(&inputBuffer[written], ",%c", logger->Cinp[i]);
-  }
-  sprintf(&inputBuffer[written], " ");
-
-  inputString = malloc((written+1)*sizeof(char));
-  memcpy(&inputString, &inputBuffer, written+1);
+  for (i = 0; i<totToStore; i++)
+    written += sprintf(&inputBuffer[written], ",%d", logger->Iinp[i]);
+  for (i = 0; i<logger->numCargs; i++)
+    written += sprintf(&inputBuffer[written], ",%c", logger->Cinp[i]);
+  
+  inputString = (char*)realloc(inputBuffer, (written+1)*sizeof(char));
 
   #pragma omp critical 
   {
