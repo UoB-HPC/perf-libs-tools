@@ -241,21 +241,26 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
 
   /* Build delimited sting of inputs */
   	/* string length of 12 digits per integer, 1 character per char, add 1 extra each for delimiter, plus headroom at end */
+
+  unsigned int written = 0;
   stringLen = totToStore*13+logger->numCargs*2+2;
-  inputString = malloc(stringLen*sizeof(char));
+  char inputBuffer[stringLen*sizeof(char)];
+
   if (totToStore > 0)
   {
   	for (i = 0; i<totToStore; i++)
-  	{
-  		sprintf(&inputString[i*13], ",%12d", logger->Iinp[i]);
-  	}
+  		written += sprintf(&inputBuffer[written], ",%d", logger->Iinp[i]);
   }
   if (logger->numCargs > 0)
   {
   	for (i = 0; i<logger->numCargs; i++)
-  		sprintf(&inputString[logger->numIargs*13+2*i], ",%c", logger->Cinp[i]);
+  		written += sprintf(&inputBuffer[written], ",%c", logger->Cinp[i]);
   }
-  sprintf(&inputString[totToStore*13+2*logger->numCargs], " ");
+  sprintf(&inputBuffer[written], " ");
+
+  inputString = malloc((written+1)*sizeof(char));
+  memcpy(&inputString, &inputBuffer, written+1);
+
   #pragma omp critical 
   {
 
