@@ -11,7 +11,7 @@ all: Makefile armpl armpl-math generic tools
 ## ARMPL Tracer
 armpl: preload-sumgen.c 
 	cd src && gcc -fPIC ${CFLAGS} -shared -o ../lib/lib$@-summarylog.so preload-sumgen.c summary.c -ldl
-	cd src && gcc -ggdb3  -fPIC ${CFLAGS} -shared -o ../lib/lib$@-memlightlog.so preload-sumgen.c summary-memlight.c -ldl
+	cd src && gcc -fPIC ${CFLAGS} -shared -o ../lib/lib$@-memlightlog.so preload-sumgen.c summary-memlight.c -ldl
 
 
 preload-sumgen.c: src/makepreload-post.py 
@@ -42,6 +42,7 @@ tools: tools/Process-dgemm
 
 tools/Process-dgemm:
 	cd tools ; gcc -o Process-dgemm process-dgemm.c -O2 -lm
+	cd tools ; gcc -o Red-Process-dgemm red-process-dgemm.c -O2 -lm
 
 clean:
 	rm -f src/preload-gen.c src/preload-sumgen.c
