@@ -471,6 +471,7 @@ def logLAPACK(verbose_file, readline, lapackNames, lapackCnts, lapackTimes, lapa
     cnt_top = int(readline[3])
     avgtime_top = float(readline[4])
 
+  found = 0
   for fnNum in range(0,len(lapackNames)) :
     if (routine==lapackNames[fnNum]) :
       found = 1
@@ -547,7 +548,7 @@ def process_components():
     verbose_file = True
 
     # open file
-    print( "Opening file %s" % sys.argv[position])
+    print( "Opening file {} ({} out of {})".format(sys.argv[position], position, nArguments))
     if os.path.isfile(sys.argv[position]) and os.access(sys.argv[position], os.R_OK):
         inputfile = open(sys.argv[position])
         line = inputfile.readline()
