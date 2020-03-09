@@ -382,20 +382,12 @@ def calcFftContribs(nDim, fftTotCnt, fftCnt, fftLens, fftHowmany) :
 # Collect all the data about BLAS calls made
 #################################################
 
-def logBLAS(verbose_file, readline, blasNames, blasCnts, blasTimes, blasCnts_top, blasTimes_top):
-
-  if verbose_file == True:
-    routine = readline[1]
-    cnt = int(readline[3])
-    avgtime = float(readline[5])
-    cnt_top = int(readline[7])
-    avgtime_top = float(readline[9])
-  else:
-    routine = readline[0]
-    cnt = int(readline[1])
-    avgtime = float(readline[2])
-    cnt_top = int(readline[3])
-    avgtime_top = float(readline[4])
+def logBLAS(index_list, readline, blasNames, blasCnts, blasTimes, blasCnts_top, blasTimes_top):
+  routine        =       readline[index_list[0]]
+  cnt            = int(  readline[index_list[1]])
+  avgtime        = float(readline[index_list[2]])
+  cnt_top        = int(  readline[index_list[3]])
+  avgtime_top    = float(readline[index_list[4]]) 
 
   found = 0
   for fnNum in range(0,len(blasNames)) :
@@ -419,20 +411,12 @@ def logBLAS(verbose_file, readline, blasNames, blasCnts, blasTimes, blasCnts_top
 # Collect all the data about Math calls made
 #################################################
 
-def logMath(verbose_file, readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top):
-
-  if verbose_file == True:
-    routine = readline[1]
-    cnt = int(readline[3])
-    avgtime = float(readline[5])
-    cnt_top = int(readline[7])
-    avgtime_top = float(readline[9])
-  else:
-    routine = readline[0]
-    cnt = int(readline[1])
-    avgtime = float(readline[2])
-    cnt_top = int(readline[3])
-    avgtime_top = float(readline[4])
+def logMath(index_list, readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top):
+  routine        =       readline[index_list[0]]
+  cnt            = int(  readline[index_list[1]])
+  avgtime        = float(readline[index_list[2]])
+  cnt_top        = int(  readline[index_list[3]])
+  avgtime_top    = float(readline[index_list[4]]) 
 
   found = 0
   for fnNum in range(0,len(mathNames)) :
@@ -456,20 +440,13 @@ def logMath(verbose_file, readline, mathNames, mathCnts, mathTimes, mathCnts_top
 # Collect all the data about LAPACK calls made
 #################################################
 
-def logLAPACK(verbose_file, readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top):
+def logLAPACK(index_list, readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top):
 
-  if verbose_file == True:
-    routine = readline[1]
-    cnt = int(readline[3])
-    avgtime = float(readline[5])
-    cnt_top = int(readline[7])
-    avgtime_top = float(readline[9])
-  else:
-    routine = readline[0]
-    cnt = int(readline[1])
-    avgtime = float(readline[2])
-    cnt_top = int(readline[3])
-    avgtime_top = float(readline[4])
+  routine        =       readline[index_list[0]]
+  cnt            = int(  readline[index_list[1]])
+  avgtime        = float(readline[index_list[2]])
+  cnt_top        = int(  readline[index_list[3]])
+  avgtime_top    = float(readline[index_list[4]]) 
 
   found = 0
   for fnNum in range(0,len(lapackNames)) :
@@ -565,66 +542,62 @@ def process_components():
     fftExecPtrs = [ ]
 
 
+     
+    if verbose_file == True:
+      delim = None
+      index_list = [1, 3, 5, 7, 9]
+    else: 
+      delim = ","
+      index_list = [0, 1, 2, 3, 4]
+
 
 
     # read file
     for line in inputfile:
-      if verbose_file == True:
-        readline = line.split()
-        routine = readline[1]
-        newcnt = readline[3]
-        newavgtime = readline[5]
-        newcnt_top = readline[7]
-        newavgtime_top = readline[9]
-      else:
-        readline = line.split(",")
-        routine = readline[0]
-        newcnt = readline[1]
-        newavgtime = readline[2]
-        newcnt_top = readline[3]
-        newavgtime_top = readline[4]
+
+      readline       = line.split(delim)
+      routine        = readline[index_list[0]]
+      newcnt         = readline[index_list[1]]
+      newavgtime     = readline[index_list[2]]
+      newcnt_top     = readline[index_list[3]]
+      newavgtime_top = readline[index_list[4]]
 
       # Now let's search for the different sets in turn
       category=-1
 
-      # Start with this bein the main function
-      if (routine == "main") :
-        total_run_time = total_run_time + float(newavgtime)
-        category = -2
 
       # Quick get-out if it is the same as the previous
       if (routine == lastroutine) :
         category=lastcategory
-
-      if (routine in MATH_ROUTINES) :
+      # Start with this being the main function
+      elif (routine == "main") :
+        total_run_time = total_run_time + float(newavgtime)
+        category = -2
+      elif(routine in MATH_ROUTINES) :
          category = 5
-
       # FFTs : does it have the string "fft" in the routine name?
-      if (category == -1 or category==4) :
-        if ( routine.find("fft") > -1 ) :
-          category = 4
-          if verbose_file:
-            logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPtrs, fftExecPtrs)
-
+      elif((category == -1 or category==4) and routine.find("fft") > -1) :
+        category = 4
+        if verbose_file:
+          logFFT(readline, fftNames, fftLens, fftCnts, fftHowmany, fftTimes, fftPlanPtrs, fftExecPtrs)
       # BLAS : does it end in the right string_?
-      if (category == -1 ) :
+      elif(category == -1 ) :
         for level in range(0,3) :
-           for testfn in BLAS_ROUTINES[level] :
-             if ( routine.endswith(testfn) ) :
-               category = level
-
+          for testfn in BLAS_ROUTINES[level] :
+            if ( routine.endswith(testfn) ) :
+              category = level
+              break
+    
+      if (category==5) :
+         logMath(index_list, readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top)
       # BLAS : Let's process this data
-      if (category==0 or category==1 or category==2) :
-        logBLAS(verbose_file, readline, blasNames[category], blasCnts[category], blasTimes[category], blasCnts_top[category], blasTimes_top[category])
-
-      # MATH : Process the data
-      if (category == 5) :
-        logMath(verbose_file, readline, mathNames, mathCnts, mathTimes, mathCnts_top, mathTimes_top)
-
+      elif (category==0 or category==1 or category==2) :
+        logBLAS(index_list, readline, blasNames[category], blasCnts[category], blasTimes[category], blasCnts_top[category], blasTimes_top[category])
       # LAPACK : Whatever's left!
-      if (category == -1 or category==3) :
-        logLAPACK(verbose_file, readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top)
+      elif(category == -1 or category==3) :
+        logLAPACK(index_list, readline, lapackNames, lapackCnts, lapackTimes, lapackCnts_top, lapackTimes_top)
         category=3
+
 
       # Find datatype (for most routines)
       if (routine[0]=='d') :
