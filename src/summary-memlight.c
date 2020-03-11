@@ -250,8 +250,9 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
     written += sprintf(&inputBuffer[written], ",%d", logger->Iinp[i]);
   for (i = 0; i<logger->numCargs; i++)
     written += sprintf(&inputBuffer[written], ",%c", logger->Cinp[i]);
+  written += sprintf(&inputBuffer[written], " ");
   
-  inputString = (char*)realloc(inputBuffer, (written+1)*sizeof(char));
+  inputString = (char*)realloc(inputBuffer, (written)*sizeof(char));
 
   #pragma omp critical 
   {
