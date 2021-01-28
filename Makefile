@@ -1,6 +1,6 @@
 CFLAGS=-O3 -Wno-pointer-to-int-cast
 
-all: Makefile armpl armpl-math generic tools
+all: Makefile armpl armpl-numpy armpl-math generic tools
 
 ## DEPRECATED LOGGING TOOL
 # libarmpl-logger.so: preload-gen.c src/logging.c src/PROTOTYPES
@@ -11,11 +11,17 @@ all: Makefile armpl armpl-math generic tools
 ## ARMPL Tracer
 armpl: preload-sumgen.c 
 	cd src && gcc -fPIC ${CFLAGS} -shared -o ../lib/lib$@-summarylog.so preload-sumgen.c summary.c -ldl
-	cd src && gcc -fPIC ${CFLAGS} -shared -o ../lib/lib$@-memlightlog.so preload-sumgen.c summary-memlight.c -ldl
+	cd src && gcc -fPIC ${CFLAGS} -lz -shared -o ../lib/lib$@-memlightlog.so preload-sumgen.c summary-memlight.c -ldl
 
+armpl-numpy: preload-sumgen-numpy.c 
+	cd src && gcc -fPIC ${CFLAGS} -shared -o ../lib/lib$@-summarylog.so preload-sumgen-numpy.c summary.c -ldl
+	cd src && gcc -fPIC ${CFLAGS} -lz -shared -o ../lib/lib$@-memlightlog.so preload-sumgen-numpy.c summary-memlight.c -ldl
 
 preload-sumgen.c: src/makepreload-post.py 
 	cd src && python makepreload-post.py -i "PROTOTYPES"
+
+preload-sumgen-numpy.c: src/makepreload-post-numpy.py 
+	cd src && python makepreload-post-numpy.py -i "PROTOTYPES"
 
 ## ARMPL+MATH Tracer
 armpl-math: preload-sumgen-math.c

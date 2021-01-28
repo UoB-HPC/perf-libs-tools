@@ -5,6 +5,7 @@
 */
 
 #include "summary.h"
+#include <zlib.h>
 
 #define MAX_INFLIGHT_FUNCTIONS 7000 
 
@@ -21,7 +22,7 @@ void armpl_summary_exit()
   armpl_lnkdlst_t *thisEntry = listHead;
   armpl_lnkdlst_t *nextEntry = listHead;
   char *currRoutineName  = NULL;
-  FILE *fptr;
+  gzFile fptr;
   char fname[64];
   struct timespec armpl_progstop;
   double printingtime;
@@ -38,8 +39,8 @@ void armpl_summary_exit()
   	sprintf(name_root, "%s", USERENV);
   else
   	sprintf(name_root, "/tmp/armplsummary_");
-  sprintf(fname, "%s%.5d.apl", name_root, armpl_get_value_int());
-  fptr = fopen(fname, "a");
+  sprintf(fname, "%s%.5d.apl.gz", name_root, armpl_get_value_int());
+  fptr = gzopen(fname, "a");
 
    while (NULL != listEntry)
    {
@@ -54,7 +55,7 @@ void armpl_summary_exit()
    		} else {
    			printingtime = 0.0;
    		}
-   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e%s\n", 
+   		gzprintf(fptr, "%s,%d,%12.6e,%d,%12.6e%s\n", 
    				currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
    				listEntry->callCount_top, printingtime,
    				listEntry->inputsString);
@@ -67,11 +68,11 @@ void armpl_summary_exit()
 	 listEntry = nextEntry;
    }
 
-  fprintf(fptr, "main,1,%12.6e,1,%12.6e\n", 
+  gzprintf(fptr, "main,1,%12.6e,1,%12.6e\n", 
   	armpl_progstop.tv_sec - armpl_progstart.tv_sec + 1.0e-9*(armpl_progstop.tv_nsec - armpl_progstart.tv_nsec), 
   	armpl_progstop.tv_sec - armpl_progstart.tv_sec + 1.0e-9*(armpl_progstop.tv_nsec - armpl_progstart.tv_nsec));
 
-  fclose(fptr);
+  gzclose(fptr);
   printf("Arm Performance Libraries output summary stored in %s\n", fname);
   return;
 }
@@ -83,7 +84,7 @@ void armpl_summary_dump()
   armpl_lnkdlst_t *nextEntry = listHead;
   armpl_lnkdlst_t *prevEntry = listHead;
   char *currRoutineName  = NULL;
-  FILE *fptr;
+  gzFile fptr;
   char fname[64];
   struct timespec armpl_progstop;
   double printingtime;
@@ -96,8 +97,8 @@ void armpl_summary_dump()
   	sprintf(name_root, "%s", USERENV);
   else
   	sprintf(name_root, "/tmp/armplsummary_");
-  sprintf(fname, "%s%.5d.apl", name_root, armpl_get_value_int());
-  fptr = fopen(fname, "a");
+  sprintf(fname, "%s%.5d.apl.gz", name_root, armpl_get_value_int());
+  fptr = gzopen(fname, "a");
 
   while (NULL != listEntry)
   {
@@ -111,7 +112,7 @@ void armpl_summary_dump()
   		} else {
   			printingtime = 0.0;
   		}
-   		fprintf(fptr, "%s,%d,%12.6e,%d,%12.6e%s\n", 
+   		gzprintf(fptr, "%s,%d,%12.6e,%d,%12.6e%s\n", 
   			currRoutineName, listEntry->callCount, listEntry->timeTotal/listEntry->callCount, 
   				listEntry->callCount_top, printingtime,
   				listEntry->inputsString);
@@ -125,7 +126,7 @@ void armpl_summary_dump()
 	listEntry = nextEntry;
   }
 
-  fclose(fptr);
+  gzclose(fptr);
 
   listHead = NULL;
   unique_fn_calls = 0;

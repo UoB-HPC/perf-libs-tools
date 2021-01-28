@@ -72,6 +72,8 @@ void armpl_summary_exit()
 
 void armpl_logging_enter(armpl_logging_struct *logger, const char *FNC, int numVinps, int numIinps, int numCinps, int dimension)
 {
+
+ // printf("armpl_logging_enter fn %s\n", FNC);
   int totToStore;
   static int firsttime=1;
   if (1==firsttime) 
@@ -103,6 +105,7 @@ void armpl_logging_enter(armpl_logging_struct *logger, const char *FNC, int numV
   }
 
   clock_gettime(CLOCK_MONOTONIC, &logger->ts_start);
+ // printf("returning armpl_logging_enter fn %s\n", FNC);
   return;
 }
 
@@ -110,6 +113,7 @@ void armpl_logging_enter(armpl_logging_struct *logger, const char *FNC, int numV
 
 void armpl_logging_leave(armpl_logging_struct *logger, ...)
 {
+ // printf("armpl_logging_leave fn %s\n", logger->NAME);
   int i, j, dimension=0, loc=0, found;
   static FILE *fptr;
   armpl_lnkdlst_t *listEntry = listHead;
@@ -289,6 +293,7 @@ void armpl_logging_leave(armpl_logging_struct *logger, ...)
   }
   if (logger->numIargs > 1) free(logger->Iinp);
   if (logger->numCargs > 0) free(logger->Cinp);
+ // printf("returning armpl_logging_leave fn %s\n", logger->NAME);
 }
 
 /* Utility functions for accessing global data */
